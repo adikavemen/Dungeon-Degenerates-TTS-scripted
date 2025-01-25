@@ -109,6 +109,9 @@ function setUpOnTheRun()
     findCard("Soothsayer's Head")
     findCard("Fungal Parasite")
 
+    local missionDeck = getObjectFromGUID(GUIDs.missionPouch)
+    missionDeck.shuffle()
+
     -- List of objects to set up
     local setupConfig = {
         {guid = GUIDs.clue1, position = vec(-3.25, 1.86, 7.43), rotation = nil},
@@ -159,7 +162,7 @@ function findCard(cardName)
             -- Wait for the card to be fully taken from the deck
             Wait.frames(function()
                 -- Place the card into the mission pouch
-                missionDeck.putObject(cardObj)
+                missionDeck.putObject(cardObj)                
                 print("Card '" .. cardName .. "' has been moved to the table.")
             end,1)
             return
