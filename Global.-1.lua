@@ -142,26 +142,26 @@ function findCard(cardName)
     local missionDeck = getObjectFromGUID(GUIDs.missionPouch)
 
     if lootDeck == nil then
-        print("Error: Deck not found.")
+        print("Error: Loot deck not found.")
         return
     end
 
     if missionDeck == nil then
-        print("Error: Deck not found.")
+        print("Error: Mission deck not found.")
         return
     end
     
     local deckContents = lootDeck.getObjects()
     for _, card in ipairs(deckContents) do
         if card.name == cardName then
-            local params = {
-                position = vector(23.68, 0.95, 13.71),
-                index = card.index,
-                smooth = true,
-                callback_function = function(obj) obj.setRotation({0, 180, 180}) end -- Adjust rotation as needed
-            }
-            lootDeck.takeObject(params)
-            print("Card '" .. cardName .. "' has been moved to the table.")
+            -- Take the actual card object from the deck
+            local cardObj = lootDeck.takeObject({guid = card.guid})
+            -- Wait for the card to be fully taken from the deck
+            Wait.frames(function()
+                -- Place the card into the mission pouch
+                missionDeck.putObject(cardObj)
+                print("Card '" .. cardName .. "' has been moved to the table.")
+            end,1)
             return
         end
     end
